@@ -5,33 +5,30 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author <a href="mailto:mr@mobi4friends.de">Maarten Roowaan</a>
- */
 public class TransitiveDependency {
 
-    private Map<String, Set<String>> dependencies;
+    private Map<Dependency, Set<Dependency>> dependencies;
 
     public TransitiveDependency() {
-        dependencies = new HashMap<String, Set<String>>();
+        dependencies = new HashMap<Dependency, Set<Dependency>>();
     }
 
-    public void addDependency(String key, String dependency) {
-        Set<String> dependenciesByItem = dependencies.get(key);
+    public void addDependency(Dependency key, Dependency dependency) {
+        Set<Dependency> dependenciesByItem = dependencies.get(key);
         if (dependenciesByItem == null) {
-            dependenciesByItem = new HashSet<String>();
+            dependenciesByItem = new HashSet<Dependency>();
             dependencies.put(key, dependenciesByItem);
         }
         dependenciesByItem.add(dependency);
     }
 
-    public Set<String> getDependencies(String key) {
-        Set<String> directDependencies = dependencies.get(key);
-        Set<String> transitiveDependencies = new HashSet<String>();
+    public Set<Dependency> getDependencies(Dependency key) {
+        Set<Dependency> directDependencies = dependencies.get(key);
+        Set<Dependency> transitiveDependencies = new HashSet<Dependency>();
         if (directDependencies != null) {
             transitiveDependencies.addAll(directDependencies);
             //Should not allow cross-dependencies!
-            for (String directDependency : directDependencies) {
+            for (Dependency directDependency : directDependencies) {
                 transitiveDependencies.addAll(getDependencies(directDependency));
             }
         }

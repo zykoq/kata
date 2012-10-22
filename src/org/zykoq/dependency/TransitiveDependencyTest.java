@@ -9,9 +9,6 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * @author <a href="mailto:mr@mobi4friends.de">Maarten Roowaan</a>
- */
 public class TransitiveDependencyTest {
 
     private static final String DIRECT_DO_NOT_MATCH = "Direct dependencies do not match!";
@@ -25,64 +22,71 @@ public class TransitiveDependencyTest {
 
     @Test
     public void testDirectDependencyA() {
-        setDependencies("A", "B", "C");
-        Set<String> expectedDependencies = setExpectedDependencies("B", "C");
-        assertEquals(DIRECT_DO_NOT_MATCH, expectedDependencies, transitiveDependency.getDependencies("A"));
+        setDependencies(Dependency.A, Dependency.B, Dependency.C);
+        assertEquals(DIRECT_DO_NOT_MATCH,
+                setExpectedDependencies(Dependency.B, Dependency.C), transitiveDependency.getDependencies(Dependency.A));
     }
 
     @Test
     public void testDirectDependencyB() {
-        setDependencies("B", "C", "E");
-        Set<String> expectedDependencies = setExpectedDependencies("C", "E");
-        assertEquals(DIRECT_DO_NOT_MATCH, expectedDependencies, transitiveDependency.getDependencies("B"));
+        setDependencies(Dependency.B, Dependency.C, Dependency.E);
+        assertEquals(DIRECT_DO_NOT_MATCH,
+                setExpectedDependencies(Dependency.C, Dependency.E), transitiveDependency.getDependencies(Dependency.B));
     }
 
     @Test
     public void testDirectDependencyC() {
-        setDependencies("C", "G");
-        Set<String> expectedDependencies = setExpectedDependencies("G");
-        assertEquals(DIRECT_DO_NOT_MATCH, expectedDependencies, transitiveDependency.getDependencies("C"));
+        setDependencies(Dependency.C, Dependency.G);
+        assertEquals(DIRECT_DO_NOT_MATCH,
+                setExpectedDependencies(Dependency.G), transitiveDependency.getDependencies(Dependency.C));
     }
 
     @Test
     public void testTransitiveDependencyA() {
-        setDependencies("A", "B", "C");
-        setDependencies("B", "C", "E");
-        setDependencies("C", "G");
-        Set<String> expectedDependencies = setExpectedDependencies("B", "C", "E", "G");
-        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependencies, transitiveDependency.getDependencies("A"));
+        setDependencies(Dependency.A, Dependency.B, Dependency.C);
+        setDependencies(Dependency.B, Dependency.C, Dependency.E);
+        setDependencies(Dependency.C, Dependency.G);
+        assertEquals(TRANSITIVE_DO_NOT_MATCH,
+                setExpectedDependencies(Dependency.B, Dependency.C, Dependency.E, Dependency.G),
+                transitiveDependency.getDependencies(Dependency.A));
     }
 
     @Test
     public void testTransitiveDependencyAll() {
-        setDependencies("A", "B", "C");
-        setDependencies("B", "C", "E");
-        setDependencies("C", "G");
-        setDependencies("D", "A", "F");
-        setDependencies("E", "F");
-        setDependencies("F", "H");
-        Set<String> expectedDependenciesA = setExpectedDependencies("B", "C", "E", "F", "G", "H");
-        Set<String> expectedDependenciesB = setExpectedDependencies("C", "E", "F", "G", "H");
-        Set<String> expectedDependenciesC = setExpectedDependencies("G");
-        Set<String> expectedDependenciesD = setExpectedDependencies("A", "B", "C", "E", "F", "G", "H");
-        Set<String> expectedDependenciesE = setExpectedDependencies("F", "H");
-        Set<String> expectedDependenciesF = setExpectedDependencies("H");
-        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependenciesA, transitiveDependency.getDependencies("A"));
-        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependenciesB, transitiveDependency.getDependencies("B"));
-        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependenciesC, transitiveDependency.getDependencies("C"));
-        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependenciesD, transitiveDependency.getDependencies("D"));
-        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependenciesE, transitiveDependency.getDependencies("E"));
-        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependenciesF, transitiveDependency.getDependencies("F"));
+        setDependencies(Dependency.A, Dependency.B, Dependency.C);
+        setDependencies(Dependency.B, Dependency.C, Dependency.E);
+        setDependencies(Dependency.C, Dependency.G);
+        setDependencies(Dependency.D, Dependency.A, Dependency.F);
+        setDependencies(Dependency.E, Dependency.F);
+        setDependencies(Dependency.F, Dependency.H);
+        assertTransitiveDependencies(
+                setExpectedDependencies(Dependency.B, Dependency.C, Dependency.E, Dependency.F, Dependency.G, Dependency.H),
+                transitiveDependency.getDependencies(Dependency.A));
+        assertTransitiveDependencies(
+                setExpectedDependencies(Dependency.C, Dependency.E, Dependency.F, Dependency.G, Dependency.H),
+                transitiveDependency.getDependencies(Dependency.B));
+        assertTransitiveDependencies(setExpectedDependencies(Dependency.G), transitiveDependency.getDependencies(Dependency.C));
+        assertTransitiveDependencies(
+                setExpectedDependencies(Dependency.A, Dependency.B, Dependency.C, Dependency.E, Dependency.F, Dependency.G, Dependency.H),
+                transitiveDependency.getDependencies(Dependency.D));
+        assertTransitiveDependencies(
+                setExpectedDependencies(Dependency.F, Dependency.H),
+                transitiveDependency.getDependencies(Dependency.E));
+        assertTransitiveDependencies(setExpectedDependencies(Dependency.H), transitiveDependency.getDependencies(Dependency.F));
     }
 
-    private void setDependencies(String key, String... values) {
-        for (String value : values) {
+    private void assertTransitiveDependencies(Set<Dependency> expectedDependencies, Set<Dependency> actualDependencies) {
+        assertEquals(TRANSITIVE_DO_NOT_MATCH, expectedDependencies, actualDependencies);
+    }
+
+    private void setDependencies(Dependency key, Dependency... values) {
+        for (Dependency value : values) {
             transitiveDependency.addDependency(key, value);
         }
     }
 
-    private Set<String> setExpectedDependencies(String... expectedValues) {
-        Set<String> expectedDependencies = new HashSet<String>(expectedValues.length);
+    private Set<Dependency> setExpectedDependencies(Dependency... expectedValues) {
+        Set<Dependency> expectedDependencies = new HashSet<Dependency>(expectedValues.length);
         expectedDependencies.addAll(Arrays.asList(expectedValues));
         return expectedDependencies;
     }
