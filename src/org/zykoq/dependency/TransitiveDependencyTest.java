@@ -3,6 +3,7 @@ package org.zykoq.dependency;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -82,9 +83,7 @@ public class TransitiveDependencyTest {
 
     private Set<String> setExpectedDependencies(String... expectedValues) {
         Set<String> expectedDependencies = new HashSet<String>(expectedValues.length);
-        for (String expectedValue : expectedValues) {
-            expectedDependencies.add(expectedValue);
-        }
+        expectedDependencies.addAll(Arrays.asList(expectedValues));
         return expectedDependencies;
     }
 }
