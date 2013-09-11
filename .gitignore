@@ -1,0 +1,9 @@
+*.iml
+
+*./idea/.name
+/.idea/.name
+*/.idea/dictionaries/
+/.idea/dictonaries/
+*/.idea/misc.xml
+/.idea/misc.xml
+
