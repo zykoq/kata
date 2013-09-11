@@ -9,6 +9,9 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * @author <a href="mailto:mr@mobi4friends.de">Maarten Roowaan</a>
+ */
 public class TransitiveDependencyTest {
 
     private static final String DIRECT_DO_NOT_MATCH = "Direct dependencies do not match!";
