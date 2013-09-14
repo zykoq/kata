@@ -2,11 +2,33 @@ package org.zykoq.tennis;
 
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertEquals;
+
 /**
  * @author <a href="mailto:mr@mobi4friends.de">Maarten Roowaan</a>
  */
 public class MatchTest {
 
     @Test
-    public void
+    public void ScoreFirst() {
+        Match match = new Match();
+        match.addScore(Player.ONE);
+        assertEquals(15, match.getScore(Player.ONE));
+    }
+
+    @Test
+    public void LoveSecond() {
+        Match match = new Match();
+        match.addScore(Player.ONE);
+        assertEquals(0, match.getScore(Player.TWO));
+    }
+
+    @Test
+    public void ThirtyLove() {
+        Match match = new Match();
+        match.addScore(Player.ONE);
+        match.addScore(Player.ONE);
+        assertEquals(0, match.getScore(Player.TWO));
+        assertEquals(30, match.getScore(Player.ONE));
+    }
 }

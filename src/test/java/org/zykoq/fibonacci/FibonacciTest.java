@@ -72,4 +72,9 @@ public class FibonacciTest {
         int result = Fibonacci.retrieveFibonacciResult(depth);
         assertEquals(expected, result);
     }
+
+    @Test
+    public void testFibonacci46() {
+        testDepth(1836311903, 46);
+    }
 }
