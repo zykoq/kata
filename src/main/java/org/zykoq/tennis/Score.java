@@ -7,7 +7,9 @@ public enum Score {
     LOVE(0),
     FIFTEEN(15),
     THIRTY(30),
-    FORTY(40);
+    FORTY(40),
+    DEUCE(40),
+    ADVANTAGE(50);
     private final int value;
 
     private Score(int value) {
@@ -25,6 +27,12 @@ public enum Score {
                 break;
             case THIRTY:
                 result = FORTY;
+                break;
+            case FORTY:
+                result = ADVANTAGE;
+                break;
+            case DEUCE:
+                result = ADVANTAGE;
                 break;
             default:
                 result = LOVE;

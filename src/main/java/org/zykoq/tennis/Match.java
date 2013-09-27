@@ -17,7 +17,10 @@ public class Match {
 
     public void addScore(Player player) {
         Score score = game.get(player);
-//        score = score.increase();
+        Score opponentScore = game.get(player.getOpponent());
+//        if (isDeuce(score, opponentScore)) {
+//            score =
+//        }
         game.put(player, score.increase());
     }
 
